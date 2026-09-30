@@ -1,0 +1,130 @@
+@import "tailwindcss";
+
+:root {
+  /* Фирменные цвета ПГ «ЛИДЕР»: тёмно-синий из логотипа + золото с обложки */
+  --navy: #101a33;
+  --navy-2: #1e2d50;
+  --ink: #141a26;
+  --amber: #c9a227;
+  --amber-dark: #a5811a;
+  --cyan: #7d94c4;
+  --blue: #2f4f96;
+  --paper: #f5f6fa;
+  --muted: #6b7280;
+}
+
+@theme inline {
+  --color-navy: var(--navy);
+  --color-navy-2: var(--navy-2);
+  --color-ink: var(--ink);
+  --color-amber: var(--amber);
+  --color-amber-dark: var(--amber-dark);
+  --color-cyan: var(--cyan);
+  --color-blue: var(--blue);
+  --color-paper: var(--paper);
+  --color-muted: var(--muted);
+  --font-sans: var(--font-manrope), system-ui, sans-serif;
+  --font-display: var(--font-unbounded), var(--font-manrope), system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #ffffff;
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+/* чертёжная сетка на тёмных секциях */
+.blueprint-grid {
+  background-image:
+    linear-gradient(rgba(201, 162, 39, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201, 162, 39, 0.07) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* золотая линия-разделитель как в презентации */
+.gold-rule {
+  background: linear-gradient(90deg, transparent, #8b6e30, #e3c877, #8b6e30, transparent);
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee 40s linear infinite;
+}
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
+.pulse-ring::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: var(--amber);
+  animation: pulse-ring 1.8s ease-out infinite;
+  z-index: -1;
+}
+
+input[type="range"] {
+  accent-color: var(--amber);
+}
+
+/* ── Мобильная производительность ──
+   backdrop-filter и анимированные размытия — главный источник рывков на телефонах. */
+@media (max-width: 767px) {
+  .backdrop-blur-sm,
+  .backdrop-blur-md,
+  .backdrop-blur-lg,
+  .backdrop-blur-xl,
+  .backdrop-blur-2xl {
+    --tw-backdrop-blur: initial !important;
+    backdrop-filter: none !important;
+  }
+  .blur-3xl,
+  .blur-2xl,
+  .blur-\[60px\],
+  .blur-\[80px\],
+  .blur-\[100px\],
+  .blur-\[120px\] {
+    filter: blur(40px) !important;
+  }
+  .animate-marquee {
+    animation-duration: 60s;
+  }
+}
+
+.fixed {
+  transform: translateZ(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
