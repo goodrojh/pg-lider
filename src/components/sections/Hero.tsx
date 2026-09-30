@@ -42,20 +42,21 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
-          className="font-display max-w-5xl text-[34px] font-semibold leading-[1.08] tracking-[-0.02em] text-white sm:text-5xl md:text-6xl lg:text-[68px]"
+          className="font-display max-w-6xl text-[42px] font-semibold leading-[1.04] tracking-[-0.025em] text-white sm:text-[58px] md:text-[74px] lg:text-[92px]"
         >
-          Проектируем
-          <br className="hidden sm:block" /> <span className="italic text-amber">будущее</span> вместе
+          Проектируем всё —
+          <br className="hidden sm:block" /> от заводского цеха
+          <br className="hidden sm:block" /> <span className="text-amber">до памятника ЮНЕСКО</span>
         </motion.h1>
 
         <motion.p
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-          className="mt-6 max-w-[620px] text-[15px] leading-relaxed text-white/85 md:text-lg"
+          className="mt-7 max-w-[720px] text-[16px] leading-relaxed text-white/85 md:text-lg"
         >
-          Архитектурно-строительное проектирование, техническое обследование, инженерные изыскания и ведение объекта
-          до ввода в эксплуатацию. От производственных корпусов «Ростеха» до памятников ЮНЕСКО.
+          150 крупных объектов с 2018 года: производственные корпуса Ростеха и ПАО «Яковлев», жилые кварталы,
+          поликлиники, Троице-Сергиева Лавра. Проектирование, обследование, изыскания и сопровождение Главгосэкспертизы.
         </motion.p>
 
         <motion.div
