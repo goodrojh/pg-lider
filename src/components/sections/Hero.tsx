@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Clock, ShieldCheck, Award } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { asset } from "@/lib/site";
 import { useLead } from "@/components/ui/ModalProvider";
 import Header from "@/components/ui/Header";
@@ -37,24 +37,7 @@ export default function Hero() {
       <Header />
 
       {/* CONTENT */}
-      <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-5 pb-16 pt-[120px] text-center md:pt-[150px]">
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.05 }}
-          className="mb-5 inline-flex flex-wrap items-center justify-center gap-2"
-        >
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-[12px] font-semibold text-white/85 backdrop-blur-md">
-            <Award size={13} className="text-amber" /> Главгосэкспертиза
-          </span>
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-[12px] font-semibold text-white/85 backdrop-blur-md">
-            <ShieldCheck size={13} className="text-amber" /> Объекты культурного наследия
-          </span>
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-[12px] font-semibold text-white/85 backdrop-blur-md">
-            <Clock size={13} className="text-amber" /> BIM-проектирование
-          </span>
-        </motion.div>
-
+      <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-5 pb-16 pt-[140px] text-center md:pt-[170px]">
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

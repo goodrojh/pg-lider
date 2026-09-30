@@ -1,18 +1,12 @@
 import type { Metadata, Viewport } from "next";
-import { Manrope, Unbounded } from "next/font/google";
+import { IBM_Plex_Sans } from "next/font/google";
 import "./globals.css";
 import ModalProvider from "@/components/ui/ModalProvider";
 
-const manrope = Manrope({
-  subsets: ["latin", "cyrillic"],
-  variable: "--font-manrope",
-  display: "swap",
-});
-
-const unbounded = Unbounded({
+const plex = IBM_Plex_Sans({
   subsets: ["latin", "cyrillic"],
   weight: ["400", "500", "600", "700"],
-  variable: "--font-unbounded",
+  variable: "--font-plex",
   display: "swap",
 });
 
@@ -37,7 +31,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="ru" data-scroll-behavior="smooth" className={`${manrope.variable} ${unbounded.variable}`}>
+    <html lang="ru" data-scroll-behavior="smooth" className={plex.variable}>
       <body className="antialiased">
         <ModalProvider>{children}</ModalProvider>
       </body>
