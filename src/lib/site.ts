@@ -8,7 +8,6 @@ export const SITE = {
   phone: "+7 (499) 350-47-31",
   phoneHref: "tel:+74993504731",
   email: "info@pg-lider.ru",
-  site: "pg-lider.ru",
   address: "Москва · Брянск · Орёл",
   hours: "Пн–Пт 9:00–19:00",
   // Мессенджеры. MAX не поддерживает ссылки по номеру — нужен ник вида https://max.ru/@nickname.
