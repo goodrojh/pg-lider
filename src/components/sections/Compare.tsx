@@ -8,7 +8,7 @@ import SectionHeading from "@/components/ui/SectionHeading";
 const ROWS = [
   { q: "Смета и график", us: "По разделам, за 24 часа", them: "«От 1 500 ₽», после встречи" },
   { q: "Экспертиза", us: "Гарантия в договоре, замечания снимаем сами", them: "«Поможем ответить» за доп. плату" },
-  { q: "Коллизии между разделами", us: "Проверка в BIM до выпуска", them: "Находят на стройке" },
+  { q: "Конфликты между разделами", us: "Проверка в BIM до выпуска", them: "Находят на стройке" },
   { q: "Сдача работ", us: "Каждые 14 дней, поэтапно", them: "Всё «в конце срока»" },
   { q: "Связь", us: "ГИП по телефону, ответ в течение часа", them: "Менеджер, «передам инженеру»" },
   { q: "Срыв срока", us: "Неустойка 0,1% в день", them: "Без ответственности" },
@@ -33,7 +33,7 @@ export default function Compare() {
         >
           <div className="hidden grid-cols-[1.2fr_1.4fr_1.2fr] bg-navy text-white md:grid">
             <div className="px-6 py-5 text-[12px] font-bold uppercase tracking-wider text-white/60">Критерий</div>
-            <div className="bg-amber px-6 py-5 text-[13px] font-bold uppercase tracking-wider text-navy">ИСМ</div>
+            <div className="bg-amber px-6 py-5 text-[13px] font-bold uppercase tracking-wider text-navy">ЛИДЕР</div>
             <div className="px-6 py-5 text-[12px] font-bold uppercase tracking-wider text-white/60">Обычное бюро</div>
           </div>
           {ROWS.map((r, i) => (

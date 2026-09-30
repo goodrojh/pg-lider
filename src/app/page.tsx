@@ -22,11 +22,11 @@ export default function Home() {
     <main className="min-h-screen">
       <Hero />
       <Ticker />
+      <Cases />
       <Features />
       <Services />
       <HowItWorks />
       <Compare />
-      <Cases />
       <Clients />
       <Calculator />
       <Software />

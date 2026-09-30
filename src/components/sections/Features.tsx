@@ -163,7 +163,7 @@ export default function Features() {
               transition={{ delay: 0.3 }}
               className="absolute left-5 top-5 flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-[11px] font-bold text-white backdrop-blur-md"
             >
-              <AlertTriangle size={12} className="text-amber" /> Коллизий найдено: 214
+              <AlertTriangle size={12} className="text-amber" /> Конфликтов найдено: 214
             </motion.div>
             <motion.div
               initial={{ opacity: 0, y: 10 }}
@@ -185,7 +185,7 @@ export default function Features() {
           <div className="p-6">
             <h3 className="font-display text-[20px] font-semibold text-ink">BIM там, где это экономит деньги</h3>
             <p className="mt-2 text-[15px] leading-relaxed text-muted">
-              Рабочую документацию жилых домов в «Академическом» и ТРЦ «Усадьба Горбунова» вели в BIM: коллизии между
+              Рабочую документацию жилых домов в «Академическом» и ТРЦ «Усадьба Горбунова» вели в BIM: конфликты между разделами между
               разделами находим до выпуска документации, а не на площадке.
             </p>
           </div>

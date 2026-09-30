@@ -5,6 +5,7 @@ import { Phone, Menu, X } from "lucide-react";
 import { NAV, SITE, asset } from "@/lib/site";
 import { useLead } from "@/components/ui/ModalProvider";
 import Logo from "@/components/ui/Logo";
+import Messengers from "@/components/ui/Messengers";
 
 /**
  * Общая шапка. На главной ссылки якорные (#services), на внутренних страницах — /#services.
@@ -52,7 +53,7 @@ export default function Header({ solid = false }: { solid?: boolean }) {
             <Logo />
           </a>
 
-          <div className="hidden items-center gap-7 lg:flex">
+          <div className="hidden items-center gap-6 xl:flex">
             {NAV.map((item) => (
               <a
                 key={item.href}
@@ -66,15 +67,16 @@ export default function Header({ solid = false }: { solid?: boolean }) {
           </div>
 
           <div className="flex items-center gap-2">
+            <Messengers size={18} className="hidden md:flex" />
             <a
               href={SITE.phoneHref}
-              className="hidden items-center gap-2 px-3 py-2 text-[14px] font-semibold text-white/85 transition hover:text-white md:flex"
+              className="hidden items-center gap-2 px-2 py-2 text-[14px] font-semibold text-white/85 transition hover:text-white lg:flex"
             >
               <Phone size={15} className="text-amber" /> {SITE.phone}
             </a>
             <button
               onClick={callback}
-              className="hidden rounded-full bg-amber px-5 py-2.5 text-[14px] font-bold text-navy transition-all hover:scale-105 hover:bg-amber-dark active:scale-95 md:block"
+              className="hidden rounded-full bg-amber px-5 py-2.5 text-[14px] font-bold text-navy transition-all hover:scale-105 hover:bg-amber-dark active:scale-95 lg:block"
             >
               Заказать звонок
             </button>
@@ -84,7 +86,7 @@ export default function Header({ solid = false }: { solid?: boolean }) {
             <button
               onClick={() => setMenu(true)}
               aria-label="Меню"
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white lg:hidden"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white xl:hidden"
             >
               <Menu size={20} />
             </button>
@@ -122,6 +124,7 @@ export default function Header({ solid = false }: { solid?: boolean }) {
               ))}
             </nav>
             <div className="mt-auto flex flex-col gap-3">
+              <Messengers size={22} className="justify-center" />
               <a href={SITE.phoneHref} className="flex items-center justify-center gap-2 rounded-full border border-white/20 py-4 text-[16px] font-semibold text-white">
                 <Phone size={18} className="text-amber" /> {SITE.phone}
               </a>

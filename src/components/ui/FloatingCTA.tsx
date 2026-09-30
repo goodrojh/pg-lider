@@ -1,9 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Phone, FileText, MessageCircle } from "lucide-react";
+import { Phone, FileText } from "lucide-react";
 import { SITE } from "@/lib/site";
 import { useLead } from "@/components/ui/ModalProvider";
+import Messengers from "@/components/ui/Messengers";
 
 export default function FloatingCTA() {
   const { open } = useLead();
@@ -27,15 +28,9 @@ export default function FloatingCTA() {
             exit={{ opacity: 0, scale: 0.8, y: 20 }}
             className="fixed bottom-6 right-6 z-[80] hidden flex-col items-end gap-3 md:flex"
           >
-            <a
-              href={SITE.whatsapp}
-              target="_blank"
-              rel="noreferrer"
-              aria-label="WhatsApp"
-              className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-navy shadow-xl transition hover:scale-105"
-            >
-              <MessageCircle size={20} />
-            </a>
+            <div className="rounded-full border border-white/15 bg-navy/85 p-1.5 shadow-xl backdrop-blur-md">
+              <Messengers size={22} />
+            </div>
             <button
               onClick={() =>
                 open({

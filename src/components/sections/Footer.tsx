@@ -2,8 +2,9 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Phone, Mail, MapPin, Clock, Send, CheckCircle2 } from "lucide-react";
-import { SITE, NAV, SERVICES, OFFICES, asset } from "@/lib/site";
+import { SITE, NAV, SERVICES, OFFICES, MADE_BY, asset } from "@/lib/site";
 import Logo from "@/components/ui/Logo";
+import Messengers from "@/components/ui/Messengers";
 import { formatPhone, isPhoneComplete, submitLead } from "@/lib/lead";
 import { useLead } from "@/components/ui/ModalProvider";
 
@@ -99,6 +100,7 @@ export default function Footer() {
                 <span className="flex items-center gap-2"><MapPin size={14} className="text-amber" /> {SITE.address}</span>
                 <span className="flex items-center gap-2"><Clock size={14} className="text-amber" /> {SITE.hours}</span>
               </div>
+              <Messengers size={20} className="mt-4" />
             </div>
 
             <div>
@@ -143,8 +145,13 @@ export default function Footer() {
           </div>
 
           <div className="mt-4 flex flex-col items-center justify-between gap-4 md:flex-row">
-            <a href={"https://" + SITE.site} target="_blank" rel="noreferrer" className="text-[12px] text-white/50 transition-colors hover:text-white">
-              {SITE.site}
+            <a
+              href={MADE_BY.url}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-[12px] font-medium text-white/60 transition hover:border-amber/50 hover:bg-white/10 hover:text-white"
+            >
+              Сайт создан компанией <span className="font-semibold text-amber">{MADE_BY.name}</span>
             </a>
             <span className="text-[12px] text-white/40">© 2018–{new Date().getFullYear()} Проектная группа «ЛИДЕР». Все права защищены.</span>
           </div>

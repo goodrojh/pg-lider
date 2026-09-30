@@ -52,8 +52,8 @@ export default function Services() {
                 className="group flex flex-col rounded-[28px] border border-black/5 bg-white p-6 shadow-[0_2px_12px_rgba(10,22,40,0.04)] transition-all hover:shadow-[0_16px_40px_rgba(10,22,40,0.10)]"
               >
                 <div className="flex items-start justify-between">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-navy text-amber">
-                    <Icon size={22} />
+                  <div className="flex h-14 w-14 items-center justify-center rounded-[18px] bg-gradient-to-br from-amber/35 via-amber/15 to-amber/5 text-amber-dark ring-1 ring-amber/45 shadow-[inset_0_1px_0_rgba(255,255,255,0.7)]">
+                    <Icon size={26} strokeWidth={1.6} />
                   </div>
                   <span className="rounded-full bg-paper px-3 py-1 text-[11px] font-bold text-muted">{s.term}</span>
                 </div>
