@@ -1,0 +1,5 @@
+:HL["/pg-lider/_next/static/chunks/2vhu97ksosf5q.css","style"]
+:HL["/pg-lider/_next/static/media/03fc1b4a8d284b5e-s.p.0wiir8udbzjvx.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/pg-lider/_next/static/media/1bcd0e671759a44c-s.p.2qt3tdwt-y9x_.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/pg-lider/img/business.webp","image"]
+0:{"tree":{"name":"","param":null,"prefetchHints":4176,"slots":{"children":{"name":"blog","param":null,"prefetchHints":4192,"slots":{"children":{"name":"slug","param":{"type":"d","key":"izmeneniya-v-proekt-posle-ekspertizy","siblings":[]},"prefetchHints":4192,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}}}}}},"staleTime":300,"buildId":"G3UMaBSlsXrgTrHXgtPcw"}
