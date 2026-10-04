@@ -87,10 +87,15 @@ function appendLead_(data) {
     updated: now,
   };
 
-  sheet.appendRow([
+  // Пишем в заранее отформатированную строку: иначе телефон «+7 (…)» Таблица
+  // принимает за формулу и показывает #ERROR!
+  const line = sheet.getLastRow() + 1;
+  const range = sheet.getRange(line, 1, 1, HEADERS.length);
+  range.setNumberFormats([rowFormats_()]);
+  range.setValues([[
     row.id, row.date, row.status, row.name, row.phone, row.email, row.objectType, row.area,
     row.comment, row.file, row.intent, row.page, row.owner, row.notes, row.updated,
-  ]);
+  ]]);
   return row;
 }
 
@@ -132,8 +137,11 @@ function setupSheet_(sheet) {
   const widths = [110, 140, 120, 150, 150, 190, 180, 90, 320, 180, 170, 240, 140, 280, 140];
   widths.forEach(function (w, i) { sheet.setColumnWidth(i + 1, w); });
 
-  sheet.getRange('B2:B').setNumberFormat('dd.MM.yyyy HH:mm');
-  sheet.getRange('O2:O').setNumberFormat('dd.MM.yyyy HH:mm');
+  // Все текстовые колонки — формат «Текст», иначе телефон «+7 (…)» превратится в #ERROR!
+  const fmt = rowFormats_();
+  for (let c = 0; c < fmt.length; c++) {
+    sheet.getRange(2, c + 1, sheet.getMaxRows() - 1, 1).setNumberFormat(fmt[c]);
+  }
 
   const rule = SpreadsheetApp.newDataValidation().requireValueInList(STATUSES, true).build();
   sheet.getRange('C2:C').setDataValidation(rule);
@@ -276,6 +284,12 @@ function addDemoLead() {
 }
 
 // ─────────────────────────── УТИЛИТЫ ───────────────────────────
+
+/** Форматы ячеек строки: даты — датой, остальное — текстом. */
+function rowFormats_() {
+  const D = 'dd.MM.yyyy HH:mm';
+  return ['@', D, '@', '@', '@', '@', '@', '@', '@', '@', '@', '@', '@', '@', D];
+}
 
 function str_(v) {
   return v === undefined || v === null ? '' : String(v).slice(0, 2000);
