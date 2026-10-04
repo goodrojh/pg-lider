@@ -17,7 +17,8 @@ export const SITE = {
     telegram: "https://t.me/+74993504731",
     whatsapp: "https://wa.me/74993504731",
   },
-  // Куда отправлять заявки (Formspree / n8n / Telegram-бот). Пусто = демо-режим.
+  // URL веб-приложения Google Apps Script (инструкция — в папке /crm).
+  // Пусто = демо-режим: формы показывают успех, но никуда не отправляют.
   formEndpoint: "",
 };
 

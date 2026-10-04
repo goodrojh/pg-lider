@@ -20,15 +20,32 @@ export function isPhoneComplete(v: string) {
   return v.replace(/\D/g, "").length >= 11;
 }
 
-/** Отправляет заявку на SITE.formEndpoint. Без endpoint — демо-режим (успех через 0.7 с). */
+/**
+ * Отправляет заявку на SITE.formEndpoint (веб-приложение Google Apps Script — см. /crm).
+ * Content-Type намеренно text/plain: так браузер не делает preflight-запрос,
+ * который Apps Script не умеет обрабатывать. Тело всё равно приходит JSON-строкой.
+ * Без endpoint — демо-режим (успех через 0.7 с).
+ */
 export async function submitLead(payload: Record<string, string>) {
   if (!SITE.formEndpoint) {
     await new Promise((r) => setTimeout(r, 700));
     return;
   }
-  await fetch(SITE.formEndpoint, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ page: typeof location !== "undefined" ? location.href : "", ...payload }),
+  const body = JSON.stringify({
+    page: typeof location !== "undefined" ? location.href : "",
+    sentAt: new Date().toISOString(),
+    ...payload,
   });
+  const init: RequestInit = {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body,
+  };
+  try {
+    await fetch(SITE.formEndpoint, init);
+  } catch {
+    // Если ответ заблокирован политикой CORS — отправляем «вслепую»,
+    // заявка всё равно доходит до таблицы.
+    await fetch(SITE.formEndpoint, { ...init, mode: "no-cors" });
+  }
 }
