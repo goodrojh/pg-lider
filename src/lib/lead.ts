@@ -28,6 +28,11 @@ export function isPhoneComplete(v: string) {
  */
 export async function submitLead(payload: Record<string, string>) {
   if (!SITE.formEndpoint) {
+    console.warn(
+      "[ЛИДЕР] Заявка НЕ отправлена: не заполнен formEndpoint в src/lib/site.ts. " +
+        "Вставьте URL веб-приложения Google Apps Script (инструкция — в папке /crm).",
+      payload
+    );
     await new Promise((r) => setTimeout(r, 700));
     return;
   }

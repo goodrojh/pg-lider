@@ -97,7 +97,7 @@ export default function FAQ() {
               <path d="M7 7v6a2 2 0 0 0 2 2h9" />
               <path d="m15 11 4 4-4 4" />
             </svg>
-            <div className="pointer-events-none absolute bottom-[-10px] left-1/2 h-[20px] w-[120%] -translate-x-1/2 bg-[radial-gradient(circle,rgba(216,171,87,0.55),rgba(53,194,230,0.2),transparent_70%)] opacity-80 blur-[15px] transition-opacity group-hover:opacity-100" />
+            <div className="pointer-events-none absolute bottom-[-10px] left-1/2 h-[20px] w-[120%] -translate-x-1/2 bg-[radial-gradient(circle,rgba(237,191,85,0.6),rgba(53,194,230,0.2),transparent_70%)] opacity-80 blur-[15px] transition-opacity group-hover:opacity-100" />
           </button>
         </div>
       </div>

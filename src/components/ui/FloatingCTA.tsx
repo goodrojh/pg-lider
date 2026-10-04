@@ -41,7 +41,7 @@ export default function FloatingCTA() {
                   submitLabel: "Жду звонка",
                 })
               }
-              className="pulse-ring relative flex h-14 items-center gap-2 rounded-full bg-amber pl-5 pr-6 text-[15px] font-bold text-navy shadow-[0_8px_32px_rgba(216,171,87,0.50)] transition hover:bg-amber-dark"
+              className="pulse-ring relative flex h-14 items-center gap-2 rounded-full bg-amber pl-5 pr-6 text-[15px] font-bold text-navy shadow-[0_8px_32px_rgba(237,191,85,0.55)] transition hover:bg-amber-dark"
             >
               <Phone size={18} /> Заказать звонок
             </button>

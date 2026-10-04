@@ -5,7 +5,7 @@
   --navy: #101a33;
   --navy-2: #1e2d50;
   --ink: #141a26;
-  --amber: #d8ab57;
+  --amber: #edbf55;
   --amber-dark: #9b7126;
   --cyan: #7d94c4;
   --blue: #2f4f96;
@@ -56,14 +56,14 @@ body {
 /* чертёжная сетка на тёмных секциях */
 .blueprint-grid {
   background-image:
-    linear-gradient(rgba(216, 171, 87, 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(216, 171, 87, 0.08) 1px, transparent 1px);
+    linear-gradient(rgba(237, 191, 85, 0.10) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(237, 191, 85, 0.10) 1px, transparent 1px);
   background-size: 48px 48px;
 }
 
 /* золотая линия-разделитель как в презентации */
 .gold-rule {
-  background: linear-gradient(90deg, transparent, #9b7126, #ecd49a, #9b7126, transparent);
+  background: linear-gradient(90deg, transparent, #a87d24, #f6dfa6, #a87d24, transparent);
 }
 
 @keyframes marquee {
