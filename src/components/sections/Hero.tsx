@@ -67,7 +67,7 @@ export default function Hero() {
         >
           <button
             onClick={openMain}
-            className="group flex w-full items-center justify-center gap-2 rounded-full bg-amber px-8 py-4 text-base font-bold text-navy shadow-[0_8px_32px_rgba(245,165,36,0.35)] transition-all hover:scale-105 hover:bg-amber-dark active:scale-95 sm:w-auto"
+            className="group flex w-full items-center justify-center gap-2 rounded-full bg-amber px-8 py-4 text-base font-bold text-navy shadow-[0_8px_32px_rgba(216,171,87,0.40)] transition-all hover:scale-105 hover:bg-amber-dark active:scale-95 sm:w-auto"
           >
             Получить смету за 24 часа
             <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />

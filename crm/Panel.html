@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <style>
   :root{
-    --navy:#16233f; --navy-2:#1e2d50; --gold:#c9a227; --gold-dark:#a5811a;
+    --navy:#16233f; --navy-2:#1e2d50; --gold:#c08f2a; --gold-dark:#9b7126;
     --paper:#f5f6fa; --line:#e6e8ef; --muted:#6b7280; --ink:#141a26;
   }
   *{box-sizing:border-box}
@@ -196,7 +196,7 @@
 
   function save(line, field, value, el){
     var patch = {}; patch[field] = value;
-    el.style.borderColor = '#c9a227';
+    el.style.borderColor = '#c08f2a';
     google.script.run.withSuccessHandler(function(){
       el.style.borderColor = '';
       var s = document.getElementById('sv' + line);
