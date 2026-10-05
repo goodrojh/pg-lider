@@ -2,6 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
   :root{
     --navy:#16233f; --navy-2:#1e2d50; --gold:#c08f2a; --gold-dark:#9b7126;
@@ -83,9 +84,49 @@
   .modal .foot{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
   .err{color:#b3261e;font-size:13px;margin-top:10px}
   @media(max-width:620px){.grid{grid-template-columns:1fr}}
-  @media(max-width:860px){
-    th:nth-child(5),td:nth-child(5),th:nth-child(6),td:nth-child(6){display:none}
-    .cmt{max-width:200px}
+  /* ── Телефон: вместо таблицы — карточки ── */
+  @media(max-width:760px){
+    .wrap{padding:14px 12px 40px}
+    header{gap:10px}
+    .brand{font-size:16px;flex:1 0 100%;order:-2}
+    .spacer{display:none}
+    header .btn{flex:1;padding:12px 10px;font-size:13px;white-space:nowrap}
+    header .btn:last-child{flex:1 0 100%;order:-1;padding:13px}
+
+    .kpis{grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+    .kpi{padding:12px 13px;border-radius:14px}
+    .kpi b{font-size:20px}
+    .kpi span{font-size:11px}
+
+    .tools{gap:7px;margin-bottom:14px}
+    input[type=search]{flex:1 0 100%;order:-1;font-size:16px;padding:12px 16px}
+    .chip{padding:8px 13px}
+
+    .card{border:0;background:transparent;border-radius:0;overflow:visible}
+    table,tbody,tr,td{display:block;width:100%}
+    thead{display:none}
+    tr{background:#fff;border:1px solid var(--line);border-radius:16px;
+       padding:14px;margin-bottom:12px;box-shadow:0 1px 2px rgba(16,26,51,.04)}
+    tr:hover td{background:transparent}
+    td{border:0;padding:9px 0}
+    td:first-child{padding:0 0 10px;margin-bottom:4px;border-bottom:1px solid var(--line)}
+    td[data-l]:not(:first-child)::before{content:attr(data-l);display:block;font-size:11px;
+      text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px}
+
+    .cmt{max-width:none}
+    .sum{width:100%;text-align:left}
+    select,textarea,input.inp{font-size:16px;padding:11px 12px}
+    textarea{min-height:60px}
+    .msg a{width:36px;height:36px;font-size:15px}
+    .nm{font-size:16px}
+    .st{font-size:12px;padding:4px 12px}
+
+    .overlay{padding:12px}
+    .modal{padding:18px;border-radius:16px}
+    .modal h2{font-size:18px}
+    .grid input,.grid select,.grid textarea{font-size:16px;padding:11px 12px}
+    .modal .foot{flex-direction:column-reverse;gap:8px}
+    .modal .foot .btn{width:100%;padding:13px}
   }
 </style>
 </head>
@@ -213,30 +254,30 @@
       var tel = digits(r.phone);
       var req = [r.objectType, r.area ? r.area + ' м²' : ''].filter(Boolean).join(' · ');
       return '<tr>' +
-        '<td><div class="nm">' + esc(r.id) + '</div><div class="sub">' + esc(r.date) + '</div>' +
+        '<td data-l="Заявка"><div class="nm">' + esc(r.id) + '</div><div class="sub">' + esc(r.date) + '</div>' +
           '<div class="sub">' + esc(r.intent) + '</div></td>' +
-        '<td><div class="nm">' + esc(r.name || '—') + '</div>' +
+        '<td data-l="Контакт"><div class="nm">' + esc(r.name || '—') + '</div>' +
           (r.phone ? '<div class="sub"><a href="tel:+' + tel + '">' + esc(r.phone) + '</a></div>' : '') +
           (r.email ? '<div class="sub"><a href="mailto:' + esc(r.email) + '">' + esc(r.email) + '</a></div>' : '') +
           (tel ? '<div class="msg"><a href="https://wa.me/' + tel + '" target="_blank" title="WhatsApp">💬</a>' +
                  '<a href="https://t.me/+' + tel + '" target="_blank" title="Telegram">✈️</a></div>' : '') +
         '</td>' +
-        '<td><span class="st s' + si + '">' + esc(r.status) + '</span>' +
+        '<td data-l="Статус"><span class="st s' + si + '">' + esc(r.status) + '</span>' +
           '<select style="margin-top:7px" onchange="save(' + r.line + ',\'status\',this.value,this)">' +
           STATUSES.map(function(s){
             return '<option' + (s === r.status ? ' selected' : '') + '>' + esc(s) + '</option>';
           }).join('') + '</select></td>' +
-        '<td>' + (req ? '<div class="nm">' + esc(req) + '</div>' : '') +
+        '<td data-l="Запрос">' + (req ? '<div class="nm">' + esc(req) + '</div>' : '') +
           (r.comment ? '<div class="sub cmt">' + esc(r.comment) + '</div>' : '') +
           (r.file ? '<div class="sub">📎 ' + esc(r.file) + '</div>' : '') +
           (r.page ? '<div class="sub"><a href="' + esc(r.page) + '" target="_blank">страница</a></div>' : '') +
         '</td>' +
-        '<td><div class="money">' + (r.amount ? money(r.amount) : '—') + '</div>' +
+        '<td data-l="Сумма договора"><div class="money">' + (r.amount ? money(r.amount) : '—') + '</div>' +
           '<input class="inp sum" style="margin-top:6px" value="' + (r.amount || '') + '" placeholder="сумма"' +
           ' onchange="save(' + r.line + ',\'amount\',this.value,this)"></td>' +
-        '<td><input class="inp" value="' + esc(r.owner) + '" placeholder="кто ведёт"' +
+        '<td data-l="Ответственный"><input class="inp" value="' + esc(r.owner) + '" placeholder="кто ведёт"' +
           ' onchange="save(' + r.line + ',\'owner\',this.value,this)"></td>' +
-        '<td><textarea placeholder="итог звонка, договорённости…"' +
+        '<td data-l="Заметки"><textarea placeholder="итог звонка, договорённости…"' +
           ' onchange="save(' + r.line + ',\'notes\',this.value,this)">' + esc(r.notes) + '</textarea>' +
           '<div class="saved" id="sv' + r.line + '">сохранено</div></td>' +
       '</tr>';
