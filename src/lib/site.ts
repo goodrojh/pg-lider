@@ -5,8 +5,8 @@ export const SITE = {
   name: "ЛИДЕР",
   tagline: "проектная группа",
   slogan: "Проектируем будущее вместе",
-  phone: "+7 (499) 350-47-31",
-  phoneHref: "tel:+74993504731",
+  phone: "+7 (968) 248-18-47",
+  phoneHref: "tel:+79682481847",
   email: "info@pg-lider.ru",
   address: "Москва · Брянск · Орёл",
   hours: "Пн–Пт 9:00–19:00",
@@ -14,8 +14,8 @@ export const SITE = {
   // Пустая ссылка = кнопка открывает форму «напишем вам первыми».
   messengers: {
     max: "",
-    telegram: "https://t.me/+74993504731",
-    whatsapp: "https://wa.me/74993504731",
+    telegram: "https://t.me/+79682481847",
+    whatsapp: "https://wa.me/79682481847",
   },
   // URL веб-приложения Google Apps Script (инструкция — в папке /crm).
   // Пусто = демо-режим: формы показывают успех, но никуда не отправляют.

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<style>
+  :root{
+    --navy:#16233f; --navy-2:#1e2d50; --gold:#c08f2a; --gold-dark:#9b7126;
+    --paper:#f5f6fa; --line:#e6e8ef; --muted:#6b7280; --ink:#141a26;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);
+       font:14px/1.45 "IBM Plex Sans",-apple-system,Segoe UI,Roboto,system-ui,sans-serif}
+  .wrap{padding:18px 20px 40px;max-width:1500px;margin:0 auto}
+
+  header{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+  .brand{font-weight:700;font-size:18px;letter-spacing:-.01em}
+  .brand span{color:var(--gold-dark)}
+  .spacer{flex:1}
+  .btn{border:0;border-radius:999px;padding:9px 16px;font:600 13px/1 inherit;cursor:pointer;
+       background:var(--navy);color:#fff;transition:.15s}
+  .btn:hover{background:var(--navy-2)}
+  .btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+  .btn.ghost:hover{border-color:var(--gold)}
+
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:16px}
+  .kpi{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px}
+  .kpi b{display:block;font-size:26px;line-height:1.1;letter-spacing:-.02em}
+  .kpi span{color:var(--muted);font-size:12px}
+  .kpi.hot b{color:var(--gold-dark)}
+
+  .tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+  .chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;
+        font-size:13px;font-weight:600;cursor:pointer;color:#374151}
+  .chip.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+  input[type=search]{flex:1;min-width:200px;border:1px solid var(--line);border-radius:999px;
+        padding:9px 16px;font:inherit;background:#fff;outline:0}
+  input[type=search]:focus{border-color:var(--gold)}
+
+  .card{background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden}
+  table{width:100%;border-collapse:collapse}
+  th{background:#fafbfd;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.06em;
+     color:var(--muted);padding:11px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+  td{padding:12px;border-bottom:1px solid var(--line);vertical-align:top}
+  tr:last-child td{border-bottom:0}
+  tr:hover td{background:#fcfcfe}
+  .nm{font-weight:600}
+  .sub{color:var(--muted);font-size:12px;margin-top:3px}
+  a{color:var(--navy-2);text-decoration:none}
+  a:hover{text-decoration:underline}
+  select,textarea,input.inp{border:1px solid var(--line);border-radius:10px;padding:7px 9px;
+        font:inherit;background:#fff;outline:0;width:100%}
+  select:focus,textarea:focus,input.inp:focus{border-color:var(--gold)}
+  textarea{resize:vertical;min-height:38px}
+  .st{display:inline-block;border-radius:999px;padding:3px 10px;font-size:11px;font-weight:700}
+  .s0{background:#fff4d6;color:#8a6b00}
+  .s1{background:#e3f0ff;color:#1b4f9c}
+  .s2{background:#e8e2ff;color:#4a35a8}
+  .s3{background:#ddf5e3;color:#176b34}
+  .s4{background:#f3f4f6;color:#6b7280}
+  .msg{display:flex;gap:6px;margin-top:6px}
+  .msg a{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;
+         border-radius:8px;background:var(--paper);font-size:12px}
+  .empty{padding:50px;text-align:center;color:var(--muted)}
+  .saved{color:#176b34;font-size:11px;opacity:0;transition:.25s}
+  .saved.on{opacity:1}
+  .cmt{max-width:360px;white-space:pre-wrap}
+  .sum{width:110px;text-align:right}
+  .money{font-weight:700;white-space:nowrap}
+
+  .overlay{position:fixed;inset:0;background:rgba(16,26,51,.55);display:none;
+           align-items:flex-start;justify-content:center;padding:28px 16px;z-index:50;overflow:auto}
+  .overlay.on{display:flex}
+  .modal{background:#fff;border-radius:20px;max-width:680px;width:100%;padding:24px;
+         box-shadow:0 24px 60px rgba(16,26,51,.28)}
+  .modal h2{margin:0 0 4px;font-size:20px}
+  .modal p.hint{margin:0 0 18px;color:var(--muted);font-size:13px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .grid label{display:flex;flex-direction:column;gap:5px;font-size:12px;color:var(--muted)}
+  .grid label.full{grid-column:1/-1}
+  .grid input,.grid select,.grid textarea{border:1px solid var(--line);border-radius:10px;
+         padding:9px 11px;font:inherit;background:#fff;outline:0;color:var(--ink)}
+  .grid input:focus,.grid select:focus,.grid textarea:focus{border-color:var(--gold)}
+  .modal .foot{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
+  .err{color:#b3261e;font-size:13px;margin-top:10px}
+  @media(max-width:620px){.grid{grid-template-columns:1fr}}
+  @media(max-width:860px){
+    th:nth-child(5),td:nth-child(5),th:nth-child(6),td:nth-child(6){display:none}
+    .cmt{max-width:200px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">CRM проектной группы <span>«ЛИДЕР»</span></div>
+    <div class="spacer"></div>
+    <button class="btn ghost" onclick="load()">Обновить</button>
+    <button class="btn ghost" onclick="exportCsv()">Выгрузить CSV</button>
+    <button class="btn" onclick="openAdd()">+ Добавить заявку</button>
+  </header>
+
+  <div class="kpis" id="kpis"></div>
+
+  <div class="tools">
+    <button class="chip on" data-f="Все" onclick="setFilter('Все',this)">Все</button>
+    <? for (var i = 0; i < statuses.length; i++) { ?>
+      <button class="chip" data-f="<?= statuses[i] ?>" onclick="setFilter('<?= statuses[i] ?>',this)"><?= statuses[i] ?></button>
+    <? } ?>
+    <input type="search" id="q" placeholder="Поиск по имени, телефону, объекту, комментарию…" oninput="render()">
+  </div>
+
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:150px">Заявка</th>
+          <th style="width:190px">Контакт</th>
+          <th style="width:150px">Статус</th>
+          <th>Запрос</th>
+          <th style="width:130px">Сумма, ₽</th>
+          <th style="width:140px">Ответственный</th>
+          <th style="width:200px">Заметки</th>
+        </tr>
+      </thead>
+      <tbody id="tb"><tr><td colspan="7" class="empty">Загружаем заявки…</td></tr></tbody>
+    </table>
+  </div>
+</div>
+
+<div class="overlay" id="ov" onclick="if(event.target===this) closeAdd()">
+  <div class="modal">
+    <h2>Новая заявка</h2>
+    <p class="hint">Для обращений не с сайта: звонок, мессенджер, рекомендация, тендер.</p>
+    <div class="grid">
+      <label>Имя<input id="f_name" placeholder="Андрей Смирнов"></label>
+      <label>Телефон<input id="f_phone" placeholder="+7 (___) ___-__-__"></label>
+      <label>E-mail<input id="f_email" placeholder="client@company.ru"></label>
+      <label>Откуда обращение<select id="f_source"></select></label>
+      <label>Тип объекта<input id="f_object" placeholder="Промышленное здание / склад"></label>
+      <label>Площадь, м²<input id="f_area" placeholder="12000"></label>
+      <label>Статус<select id="f_status"></select></label>
+      <label>Сумма договора, ₽<input id="f_amount" placeholder="например, 1 200 000"></label>
+      <label>Ответственный<input id="f_owner" placeholder="кто ведёт"></label>
+      <label class="full">Запрос клиента<textarea id="f_comment" rows="3" placeholder="что нужно сделать, сроки, особенности объекта"></textarea></label>
+      <label class="full">Заметки<textarea id="f_notes" rows="2" placeholder="итог разговора, договорённости"></textarea></label>
+    </div>
+    <div class="err" id="f_err" style="display:none"></div>
+    <div class="foot">
+      <button class="btn ghost" onclick="closeAdd()">Отмена</button>
+      <button class="btn" id="f_save" onclick="saveNew()">Добавить заявку</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  var DATA = [], STATUSES = [], SOURCES = [], FILTER = 'Все';
+
+  function load(){
+    google.script.run.withSuccessHandler(function(res){
+      DATA = res.rows; STATUSES = res.statuses; SOURCES = res.sources || []; render();
+    }).withFailureHandler(function(e){
+      document.getElementById('tb').innerHTML =
+        '<tr><td colspan="7" class="empty">Не удалось загрузить: ' + e.message + '</td></tr>';
+    }).apiList();
+  }
+
+  function setFilter(f, el){
+    FILTER = f;
+    [].forEach.call(document.querySelectorAll('.chip'), function(c){ c.classList.toggle('on', c === el); });
+    render();
+  }
+
+  function esc(s){ return String(s||'').replace(/[&<>"]/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+
+  function digits(p){ return String(p||'').replace(/\D/g,''); }
+
+  function visible(){
+    var q = (document.getElementById('q').value || '').toLowerCase().trim();
+    return DATA.filter(function(r){
+      if (FILTER !== 'Все' && r.status !== FILTER) return false;
+      if (!q) return true;
+      return [r.name,r.phone,r.email,r.objectType,r.comment,r.intent,r.owner,r.notes]
+        .join(' ').toLowerCase().indexOf(q) >= 0;
+    });
+  }
+
+  function render(){
+    var rows = visible();
+    var today = new Date(); today.setHours(0,0,0,0);
+    var k = {
+      all: DATA.length,
+      today: DATA.filter(function(r){ return r.ts >= today.getTime(); }).length,
+      nw: DATA.filter(function(r){ return r.status === 'Новая'; }).length,
+      work: DATA.filter(function(r){ return r.status === 'В работе' || r.status === 'КП отправлено'; }).length,
+      deal: DATA.filter(function(r){ return r.status === 'Договор'; }).length
+    };
+    var won = DATA.filter(function(r){ return r.status === 'Договор'; })
+                  .reduce(function(a,r){ return a + (Number(r.amount)||0); }, 0);
+    var pipe = DATA.filter(function(r){ return r.status === 'В работе' || r.status === 'КП отправлено'; })
+                   .reduce(function(a,r){ return a + (Number(r.amount)||0); }, 0);
+    document.getElementById('kpis').innerHTML =
+      kpi(k.nw,'новых заявок','hot') + kpi(k.today,'сегодня') + kpi(k.work,'в работе') +
+      kpi(k.deal,'договоров') + kpi(money(won),'сумма договоров','hot') + kpi(money(pipe),'в работе, ₽');
+
+    if (!rows.length){
+      document.getElementById('tb').innerHTML = '<tr><td colspan="7" class="empty">Заявок пока нет</td></tr>';
+      return;
+    }
+
+    document.getElementById('tb').innerHTML = rows.map(function(r){
+      var si = STATUSES.indexOf(r.status); if (si < 0) si = 0;
+      var tel = digits(r.phone);
+      var req = [r.objectType, r.area ? r.area + ' м²' : ''].filter(Boolean).join(' · ');
+      return '<tr>' +
+        '<td><div class="nm">' + esc(r.id) + '</div><div class="sub">' + esc(r.date) + '</div>' +
+          '<div class="sub">' + esc(r.intent) + '</div></td>' +
+        '<td><div class="nm">' + esc(r.name || '—') + '</div>' +
+          (r.phone ? '<div class="sub"><a href="tel:+' + tel + '">' + esc(r.phone) + '</a></div>' : '') +
+          (r.email ? '<div class="sub"><a href="mailto:' + esc(r.email) + '">' + esc(r.email) + '</a></div>' : '') +
+          (tel ? '<div class="msg"><a href="https://wa.me/' + tel + '" target="_blank" title="WhatsApp">💬</a>' +
+                 '<a href="https://t.me/+' + tel + '" target="_blank" title="Telegram">✈️</a></div>' : '') +
+        '</td>' +
+        '<td><span class="st s' + si + '">' + esc(r.status) + '</span>' +
+          '<select style="margin-top:7px" onchange="save(' + r.line + ',\'status\',this.value,this)">' +
+          STATUSES.map(function(s){
+            return '<option' + (s === r.status ? ' selected' : '') + '>' + esc(s) + '</option>';
+          }).join('') + '</select></td>' +
+        '<td>' + (req ? '<div class="nm">' + esc(req) + '</div>' : '') +
+          (r.comment ? '<div class="sub cmt">' + esc(r.comment) + '</div>' : '') +
+          (r.file ? '<div class="sub">📎 ' + esc(r.file) + '</div>' : '') +
+          (r.page ? '<div class="sub"><a href="' + esc(r.page) + '" target="_blank">страница</a></div>' : '') +
+        '</td>' +
+        '<td><div class="money">' + (r.amount ? money(r.amount) : '—') + '</div>' +
+          '<input class="inp sum" style="margin-top:6px" value="' + (r.amount || '') + '" placeholder="сумма"' +
+          ' onchange="save(' + r.line + ',\'amount\',this.value,this)"></td>' +
+        '<td><input class="inp" value="' + esc(r.owner) + '" placeholder="кто ведёт"' +
+          ' onchange="save(' + r.line + ',\'owner\',this.value,this)"></td>' +
+        '<td><textarea placeholder="итог звонка, договорённости…"' +
+          ' onchange="save(' + r.line + ',\'notes\',this.value,this)">' + esc(r.notes) + '</textarea>' +
+          '<div class="saved" id="sv' + r.line + '">сохранено</div></td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  function money(v){
+    var n = Number(v) || 0;
+    return n.toLocaleString('ru-RU') + ' ₽';
+  }
+
+  function kpi(v,label,cls){
+    return '<div class="kpi ' + (cls||'') + '"><b>' + v + '</b><span>' + label + '</span></div>';
+  }
+
+  function save(line, field, value, el){
+    var patch = {}; patch[field] = value;
+    el.style.borderColor = '#c08f2a';
+    google.script.run.withSuccessHandler(function(){
+      el.style.borderColor = '';
+      var s = document.getElementById('sv' + line);
+      if (s){ s.classList.add('on'); setTimeout(function(){ s.classList.remove('on'); }, 1200); }
+      var row = DATA.filter(function(r){ return r.line === line; })[0];
+      if (row){
+        row[field] = field === 'amount' ? (parseFloat(String(value).replace(/[^0-9.,-]/g,'').replace(',','.')) || '') : value;
+        if (field === 'status' || field === 'amount') render();
+      }
+    }).apiUpdate(line, patch);
+  }
+
+  function exportCsv(){
+    var rows = visible();
+    var head = ['ID','Дата','Статус','Имя','Телефон','E-mail','Тип объекта','Площадь','Комментарий','Источник','Сумма','Ответственный','Заметки'];
+    var body = rows.map(function(r){
+      return [r.id,r.date,r.status,r.name,r.phone,r.email,r.objectType,r.area,r.comment,r.intent,r.amount,r.owner,r.notes]
+        .map(function(v){ return '"' + String(v||'').replace(/"/g,'""') + '"'; }).join(';');
+    });
+    var csv = '﻿' + [head.join(';')].concat(body).join('\n');
+    var a = document.createElement('a');
+    a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+    a.download = 'zayavki-lider.csv';
+    a.click();
+  }
+
+  function openAdd(){
+    var st = document.getElementById('f_status');
+    st.innerHTML = STATUSES.map(function(s){ return '<option>' + esc(s) + '</option>'; }).join('');
+    var sr = document.getElementById('f_source');
+    sr.innerHTML = (SOURCES.length ? SOURCES : ['Звонок']).map(function(s){ return '<option>' + esc(s) + '</option>'; }).join('');
+    ['f_name','f_phone','f_email','f_object','f_area','f_amount','f_owner','f_comment','f_notes']
+      .forEach(function(id){ document.getElementById(id).value = ''; });
+    document.getElementById('f_err').style.display = 'none';
+    document.getElementById('ov').classList.add('on');
+    document.getElementById('f_name').focus();
+  }
+
+  function closeAdd(){ document.getElementById('ov').classList.remove('on'); }
+
+  function saveNew(){
+    var v = function(id){ return document.getElementById(id).value.trim(); };
+    var err = document.getElementById('f_err');
+    if (!v('f_name') && !v('f_phone')){
+      err.textContent = 'Укажите хотя бы имя или телефон.';
+      err.style.display = 'block';
+      return;
+    }
+    err.style.display = 'none';
+    var btn = document.getElementById('f_save');
+    btn.disabled = true; btn.textContent = 'Добавляем…';
+    google.script.run
+      .withSuccessHandler(function(){
+        btn.disabled = false; btn.textContent = 'Добавить заявку';
+        closeAdd(); load();
+      })
+      .withFailureHandler(function(e){
+        btn.disabled = false; btn.textContent = 'Добавить заявку';
+        err.textContent = 'Не удалось сохранить: ' + e.message;
+        err.style.display = 'block';
+      })
+      .apiAdd({
+        name: v('f_name'), phone: v('f_phone'), email: v('f_email'),
+        objectType: v('f_object'), area: v('f_area'), amount: v('f_amount'),
+        source: v('f_source'), status: v('f_status'), owner: v('f_owner'),
+        comment: v('f_comment'), notes: v('f_notes')
+      });
+  }
+
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeAdd(); });
+
+  load();
+  setInterval(load, 60000);
+</script>
+</body>
+</html>
