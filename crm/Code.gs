@@ -28,8 +28,11 @@ const SHEET_NAME = 'Заявки';
 const STATUSES = ['Новая', 'В работе', 'КП отправлено', 'Договор', 'Отказ'];
 const HEADERS = [
   'ID', 'Дата', 'Статус', 'Имя', 'Телефон', 'E-mail', 'Тип объекта', 'Площадь',
-  'Комментарий', 'Файл', 'Форма на сайте', 'Страница', 'Ответственный', 'Заметки', 'Обновлено',
+  'Комментарий', 'Файл', 'Источник', 'Страница', 'Ответственный', 'Заметки', 'Обновлено', 'Сумма, ₽',
 ];
+
+/** Откуда пришла заявка, если её заводят руками */
+const SOURCES = ['Звонок', 'WhatsApp', 'Telegram', 'MAX', 'Почта', 'Рекомендация', 'Тендер', 'Повторный клиент', 'Другое'];
 
 // ─────────────────────────── ПРИЁМ ЗАЯВОК С САЙТА ───────────────────────────
 
@@ -72,7 +75,7 @@ function appendLead_(data) {
   const row = {
     id: id,
     date: now,
-    status: STATUSES[0],
+    status: STATUSES.indexOf(str_(data.status)) >= 0 ? str_(data.status) : STATUSES[0],
     name: str_(data.name),
     phone: str_(data.phone),
     email: str_(data.email),
@@ -80,11 +83,12 @@ function appendLead_(data) {
     area: str_(data.area),
     comment: str_(data.comment || data.context),
     file: str_(data.file),
-    intent: str_(data.intent),
+    intent: str_(data.intent || data.source),
     page: str_(data.page),
-    owner: '',
-    notes: '',
+    owner: str_(data.owner),
+    notes: str_(data.notes),
     updated: now,
+    amount: money_(data.amount),
   };
 
   // Пишем в заранее отформатированную строку: иначе телефон «+7 (…)» Таблица
@@ -94,7 +98,7 @@ function appendLead_(data) {
   range.setNumberFormats([rowFormats_()]);
   range.setValues([[
     row.id, row.date, row.status, row.name, row.phone, row.email, row.objectType, row.area,
-    row.comment, row.file, row.intent, row.page, row.owner, row.notes, row.updated,
+    row.comment, row.file, row.intent, row.page, row.owner, row.notes, row.updated, row.amount,
   ]]);
   return row;
 }
@@ -134,7 +138,7 @@ function setupSheet_(sheet) {
   sheet.setRowHeight(1, 34);
   sheet.setFrozenRows(1);
 
-  const widths = [110, 140, 120, 150, 150, 190, 180, 90, 320, 180, 170, 240, 140, 280, 140];
+  const widths = [110, 140, 120, 150, 150, 190, 180, 90, 320, 180, 150, 240, 140, 280, 140, 130];
   widths.forEach(function (w, i) { sheet.setColumnWidth(i + 1, w); });
 
   // Все текстовые колонки — формат «Текст», иначе телефон «+7 (…)» превратится в #ERROR!
@@ -192,19 +196,41 @@ function apiList() {
       page: String(v[11] || ''),
       owner: String(v[12] || ''),
       notes: String(v[13] || ''),
+      amount: v[15] === '' || v[15] === null || v[15] === undefined ? '' : Number(v[15]) || '',
     };
   }).reverse();
-  return { rows: rows, statuses: STATUSES };
+  return { rows: rows, statuses: STATUSES, sources: SOURCES };
 }
 
 function apiUpdate(line, patch) {
   const sheet = getSheet_();
-  const map = { status: 3, owner: 13, notes: 14 };
+  const map = { status: 3, owner: 13, notes: 14, amount: 16 };
   Object.keys(patch).forEach(function (k) {
-    if (map[k]) sheet.getRange(line, map[k]).setValue(patch[k]);
+    if (!map[k]) return;
+    const value = k === 'amount' ? money_(patch[k]) : patch[k];
+    sheet.getRange(line, map[k]).setValue(value);
   });
   sheet.getRange(line, 15).setValue(new Date());
   return true;
+}
+
+/** Заявка, заведённая руками: звонок, мессенджер, рекомендация и т.п. */
+function apiAdd(data) {
+  const row = appendLead_({
+    name: data.name,
+    phone: data.phone,
+    email: data.email,
+    objectType: data.objectType,
+    area: data.area,
+    comment: data.comment,
+    source: data.source || 'Звонок',
+    status: data.status,
+    owner: data.owner,
+    notes: data.notes,
+    amount: data.amount,
+    page: 'добавлено вручную',
+  });
+  return row.id;
 }
 
 // ─────────────────────────── УВЕДОМЛЕНИЯ ───────────────────────────
@@ -288,7 +314,15 @@ function addDemoLead() {
 /** Форматы ячеек строки: даты — датой, остальное — текстом. */
 function rowFormats_() {
   const D = 'dd.MM.yyyy HH:mm';
-  return ['@', D, '@', '@', '@', '@', '@', '@', '@', '@', '@', '@', '@', '@', D];
+  const M = '#,##0\u00A0₽';
+  return ['@', D, '@', '@', '@', '@', '@', '@', '@', '@', '@', '@', '@', '@', D, M];
+}
+
+/** Приводит сумму к числу: «1 200 000 ₽» → 1200000. Пусто → ''. */
+function money_(v) {
+  if (v === undefined || v === null || v === '') return '';
+  const n = parseFloat(String(v).replace(/[^0-9.,-]/g, '').replace(/\s/g, '').replace(',', '.'));
+  return isNaN(n) ? '' : n;
 }
 
 function str_(v) {

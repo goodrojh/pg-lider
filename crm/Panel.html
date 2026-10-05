@@ -64,6 +64,25 @@
   .saved{color:#176b34;font-size:11px;opacity:0;transition:.25s}
   .saved.on{opacity:1}
   .cmt{max-width:360px;white-space:pre-wrap}
+  .sum{width:110px;text-align:right}
+  .money{font-weight:700;white-space:nowrap}
+
+  .overlay{position:fixed;inset:0;background:rgba(16,26,51,.55);display:none;
+           align-items:flex-start;justify-content:center;padding:28px 16px;z-index:50;overflow:auto}
+  .overlay.on{display:flex}
+  .modal{background:#fff;border-radius:20px;max-width:680px;width:100%;padding:24px;
+         box-shadow:0 24px 60px rgba(16,26,51,.28)}
+  .modal h2{margin:0 0 4px;font-size:20px}
+  .modal p.hint{margin:0 0 18px;color:var(--muted);font-size:13px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .grid label{display:flex;flex-direction:column;gap:5px;font-size:12px;color:var(--muted)}
+  .grid label.full{grid-column:1/-1}
+  .grid input,.grid select,.grid textarea{border:1px solid var(--line);border-radius:10px;
+         padding:9px 11px;font:inherit;background:#fff;outline:0;color:var(--ink)}
+  .grid input:focus,.grid select:focus,.grid textarea:focus{border-color:var(--gold)}
+  .modal .foot{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
+  .err{color:#b3261e;font-size:13px;margin-top:10px}
+  @media(max-width:620px){.grid{grid-template-columns:1fr}}
   @media(max-width:860px){
     th:nth-child(5),td:nth-child(5),th:nth-child(6),td:nth-child(6){display:none}
     .cmt{max-width:200px}
@@ -76,7 +95,8 @@
     <div class="brand">CRM проектной группы <span>«ЛИДЕР»</span></div>
     <div class="spacer"></div>
     <button class="btn ghost" onclick="load()">Обновить</button>
-    <button class="btn" onclick="exportCsv()">Выгрузить CSV</button>
+    <button class="btn ghost" onclick="exportCsv()">Выгрузить CSV</button>
+    <button class="btn" onclick="openAdd()">+ Добавить заявку</button>
   </header>
 
   <div class="kpis" id="kpis"></div>
@@ -97,24 +117,50 @@
           <th style="width:190px">Контакт</th>
           <th style="width:150px">Статус</th>
           <th>Запрос</th>
-          <th style="width:150px">Ответственный</th>
-          <th style="width:220px">Заметки</th>
+          <th style="width:130px">Сумма, ₽</th>
+          <th style="width:140px">Ответственный</th>
+          <th style="width:200px">Заметки</th>
         </tr>
       </thead>
-      <tbody id="tb"><tr><td colspan="6" class="empty">Загружаем заявки…</td></tr></tbody>
+      <tbody id="tb"><tr><td colspan="7" class="empty">Загружаем заявки…</td></tr></tbody>
     </table>
   </div>
 </div>
 
+<div class="overlay" id="ov" onclick="if(event.target===this) closeAdd()">
+  <div class="modal">
+    <h2>Новая заявка</h2>
+    <p class="hint">Для обращений не с сайта: звонок, мессенджер, рекомендация, тендер.</p>
+    <div class="grid">
+      <label>Имя<input id="f_name" placeholder="Андрей Смирнов"></label>
+      <label>Телефон<input id="f_phone" placeholder="+7 (___) ___-__-__"></label>
+      <label>E-mail<input id="f_email" placeholder="client@company.ru"></label>
+      <label>Откуда обращение<select id="f_source"></select></label>
+      <label>Тип объекта<input id="f_object" placeholder="Промышленное здание / склад"></label>
+      <label>Площадь, м²<input id="f_area" placeholder="12000"></label>
+      <label>Статус<select id="f_status"></select></label>
+      <label>Сумма договора, ₽<input id="f_amount" placeholder="например, 1 200 000"></label>
+      <label>Ответственный<input id="f_owner" placeholder="кто ведёт"></label>
+      <label class="full">Запрос клиента<textarea id="f_comment" rows="3" placeholder="что нужно сделать, сроки, особенности объекта"></textarea></label>
+      <label class="full">Заметки<textarea id="f_notes" rows="2" placeholder="итог разговора, договорённости"></textarea></label>
+    </div>
+    <div class="err" id="f_err" style="display:none"></div>
+    <div class="foot">
+      <button class="btn ghost" onclick="closeAdd()">Отмена</button>
+      <button class="btn" id="f_save" onclick="saveNew()">Добавить заявку</button>
+    </div>
+  </div>
+</div>
+
 <script>
-  var DATA = [], STATUSES = [], FILTER = 'Все';
+  var DATA = [], STATUSES = [], SOURCES = [], FILTER = 'Все';
 
   function load(){
     google.script.run.withSuccessHandler(function(res){
-      DATA = res.rows; STATUSES = res.statuses; render();
+      DATA = res.rows; STATUSES = res.statuses; SOURCES = res.sources || []; render();
     }).withFailureHandler(function(e){
       document.getElementById('tb').innerHTML =
-        '<tr><td colspan="6" class="empty">Не удалось загрузить: ' + e.message + '</td></tr>';
+        '<tr><td colspan="7" class="empty">Не удалось загрузить: ' + e.message + '</td></tr>';
     }).apiList();
   }
 
@@ -149,12 +195,16 @@
       work: DATA.filter(function(r){ return r.status === 'В работе' || r.status === 'КП отправлено'; }).length,
       deal: DATA.filter(function(r){ return r.status === 'Договор'; }).length
     };
+    var won = DATA.filter(function(r){ return r.status === 'Договор'; })
+                  .reduce(function(a,r){ return a + (Number(r.amount)||0); }, 0);
+    var pipe = DATA.filter(function(r){ return r.status === 'В работе' || r.status === 'КП отправлено'; })
+                   .reduce(function(a,r){ return a + (Number(r.amount)||0); }, 0);
     document.getElementById('kpis').innerHTML =
       kpi(k.nw,'новых заявок','hot') + kpi(k.today,'сегодня') + kpi(k.work,'в работе') +
-      kpi(k.deal,'договоров') + kpi(k.all,'всего заявок');
+      kpi(k.deal,'договоров') + kpi(money(won),'сумма договоров','hot') + kpi(money(pipe),'в работе, ₽');
 
     if (!rows.length){
-      document.getElementById('tb').innerHTML = '<tr><td colspan="6" class="empty">Заявок пока нет</td></tr>';
+      document.getElementById('tb').innerHTML = '<tr><td colspan="7" class="empty">Заявок пока нет</td></tr>';
       return;
     }
 
@@ -181,6 +231,9 @@
           (r.file ? '<div class="sub">📎 ' + esc(r.file) + '</div>' : '') +
           (r.page ? '<div class="sub"><a href="' + esc(r.page) + '" target="_blank">страница</a></div>' : '') +
         '</td>' +
+        '<td><div class="money">' + (r.amount ? money(r.amount) : '—') + '</div>' +
+          '<input class="inp sum" style="margin-top:6px" value="' + (r.amount || '') + '" placeholder="сумма"' +
+          ' onchange="save(' + r.line + ',\'amount\',this.value,this)"></td>' +
         '<td><input class="inp" value="' + esc(r.owner) + '" placeholder="кто ведёт"' +
           ' onchange="save(' + r.line + ',\'owner\',this.value,this)"></td>' +
         '<td><textarea placeholder="итог звонка, договорённости…"' +
@@ -188,6 +241,11 @@
           '<div class="saved" id="sv' + r.line + '">сохранено</div></td>' +
       '</tr>';
     }).join('');
+  }
+
+  function money(v){
+    var n = Number(v) || 0;
+    return n.toLocaleString('ru-RU') + ' ₽';
   }
 
   function kpi(v,label,cls){
@@ -202,15 +260,18 @@
       var s = document.getElementById('sv' + line);
       if (s){ s.classList.add('on'); setTimeout(function(){ s.classList.remove('on'); }, 1200); }
       var row = DATA.filter(function(r){ return r.line === line; })[0];
-      if (row){ row[field] = value; if (field === 'status') render(); }
+      if (row){
+        row[field] = field === 'amount' ? (parseFloat(String(value).replace(/[^0-9.,-]/g,'').replace(',','.')) || '') : value;
+        if (field === 'status' || field === 'amount') render();
+      }
     }).apiUpdate(line, patch);
   }
 
   function exportCsv(){
     var rows = visible();
-    var head = ['ID','Дата','Статус','Имя','Телефон','E-mail','Тип объекта','Площадь','Комментарий','Форма','Ответственный','Заметки'];
+    var head = ['ID','Дата','Статус','Имя','Телефон','E-mail','Тип объекта','Площадь','Комментарий','Источник','Сумма','Ответственный','Заметки'];
     var body = rows.map(function(r){
-      return [r.id,r.date,r.status,r.name,r.phone,r.email,r.objectType,r.area,r.comment,r.intent,r.owner,r.notes]
+      return [r.id,r.date,r.status,r.name,r.phone,r.email,r.objectType,r.area,r.comment,r.intent,r.amount,r.owner,r.notes]
         .map(function(v){ return '"' + String(v||'').replace(/"/g,'""') + '"'; }).join(';');
     });
     var csv = '﻿' + [head.join(';')].concat(body).join('\n');
@@ -219,6 +280,51 @@
     a.download = 'zayavki-lider.csv';
     a.click();
   }
+
+  function openAdd(){
+    var st = document.getElementById('f_status');
+    st.innerHTML = STATUSES.map(function(s){ return '<option>' + esc(s) + '</option>'; }).join('');
+    var sr = document.getElementById('f_source');
+    sr.innerHTML = (SOURCES.length ? SOURCES : ['Звонок']).map(function(s){ return '<option>' + esc(s) + '</option>'; }).join('');
+    ['f_name','f_phone','f_email','f_object','f_area','f_amount','f_owner','f_comment','f_notes']
+      .forEach(function(id){ document.getElementById(id).value = ''; });
+    document.getElementById('f_err').style.display = 'none';
+    document.getElementById('ov').classList.add('on');
+    document.getElementById('f_name').focus();
+  }
+
+  function closeAdd(){ document.getElementById('ov').classList.remove('on'); }
+
+  function saveNew(){
+    var v = function(id){ return document.getElementById(id).value.trim(); };
+    var err = document.getElementById('f_err');
+    if (!v('f_name') && !v('f_phone')){
+      err.textContent = 'Укажите хотя бы имя или телефон.';
+      err.style.display = 'block';
+      return;
+    }
+    err.style.display = 'none';
+    var btn = document.getElementById('f_save');
+    btn.disabled = true; btn.textContent = 'Добавляем…';
+    google.script.run
+      .withSuccessHandler(function(){
+        btn.disabled = false; btn.textContent = 'Добавить заявку';
+        closeAdd(); load();
+      })
+      .withFailureHandler(function(e){
+        btn.disabled = false; btn.textContent = 'Добавить заявку';
+        err.textContent = 'Не удалось сохранить: ' + e.message;
+        err.style.display = 'block';
+      })
+      .apiAdd({
+        name: v('f_name'), phone: v('f_phone'), email: v('f_email'),
+        objectType: v('f_object'), area: v('f_area'), amount: v('f_amount'),
+        source: v('f_source'), status: v('f_status'), owner: v('f_owner'),
+        comment: v('f_comment'), notes: v('f_notes')
+      });
+  }
+
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeAdd(); });
 
   load();
   setInterval(load, 60000);
