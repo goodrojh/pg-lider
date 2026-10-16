@@ -33,7 +33,7 @@ export default function Compare() {
         >
           <div className="hidden grid-cols-[1.2fr_1.4fr_1.2fr] bg-navy text-white md:grid">
             <div className="px-6 py-5 text-[12px] font-bold uppercase tracking-wider text-white/60">Критерий</div>
-            <div className="bg-amber px-6 py-5 text-[13px] font-bold uppercase tracking-wider text-navy">ЛИДЕР</div>
+            <div className="bg-amber px-6 py-5 text-[13px] font-bold uppercase tracking-wider text-navy">Раздел Проект</div>
             <div className="px-6 py-5 text-[12px] font-bold uppercase tracking-wider text-white/60">Обычное бюро</div>
           </div>
           {ROWS.map((r, i) => (

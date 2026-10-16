@@ -2,12 +2,15 @@ export const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 export const asset = (p: string) => `${BASE}${p}`;
 
 export const SITE = {
-  name: "ЛИДЕР",
-  tagline: "проектная группа",
+  name: "Раздел Проект",
+  shortName: "Раздел",
+  tagline: "проектная организация",
   slogan: "Проектируем будущее вместе",
+  domain: "razdel-proekt.ru",
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://razdel-proekt.ru",
   phone: "+7 (968) 248-18-47",
   phoneHref: "tel:+79682481847",
-  email: "info@pg-lider.ru",
+  email: "info@razdel-proekt.ru",
   address: "Москва · Брянск · Орёл",
   hours: "Пн–Пт 9:00–19:00",
   // Мессенджеры. MAX не поддерживает ссылки по номеру — нужен ник вида https://max.ru/@nickname.
@@ -425,4 +428,3 @@ export const FAQ: Record<string, { q: string; a: string }[]> = {
   ],
 };
 
-export const POSTS_LEGACY_NOTE = "Статьи ведут инженеры проектной группы «ЛИДЕР».";

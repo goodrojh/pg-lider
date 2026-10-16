@@ -1,5 +1,5 @@
 /**
- * CRM проектной группы «ЛИДЕР» на Google Apps Script.
+ * CRM «Раздел Проект» на Google Apps Script.
  *
  * Что делает:
  *   • принимает заявки с сайта (doPost) и складывает их в Google Таблицу;
@@ -12,7 +12,7 @@
 // ────────────────────────────── НАСТРОЙКИ ──────────────────────────────
 
 /** Ключ доступа к веб-панели. ОБЯЗАТЕЛЬНО замените на свой случайный набор символов. */
-const PANEL_KEY = 'lider-crm-2026';
+const PANEL_KEY = 'razdel-crm-2026';
 
 /** Куда слать уведомления о новой заявке. Пусто — не слать. */
 const NOTIFY_EMAIL = '';
@@ -50,7 +50,7 @@ function doPost(e) {
 
 function doGet(e) {
   const key = e && e.parameter ? e.parameter.key : '';
-  if (key && key === PANEL_KEY) return renderPanel_('CRM «ЛИДЕР»');
+  if (key && key === PANEL_KEY) return renderPanel_('CRM «Раздел Проект»');
   return HtmlService.createHtmlOutput(
     '<p style="font:15px system-ui;padding:24px">Сервис приёма заявок работает. Панель CRM доступна по ссылке с ключом доступа.</p>'
   );
@@ -274,7 +274,7 @@ function notify_(row) {
 
 function onOpen() {
   SpreadsheetApp.getUi()
-    .createMenu('CRM «ЛИДЕР»')
+    .createMenu('CRM «Раздел Проект»')
     .addItem('Открыть панель', 'openPanel')
     .addSeparator()
     .addItem('Оформить лист заявок', 'refreshFormatting')
@@ -283,7 +283,7 @@ function onOpen() {
 }
 
 function openPanel() {
-  SpreadsheetApp.getUi().showModalDialog(renderPanel_('CRM «ЛИДЕР»').setWidth(1180).setHeight(760), 'CRM «ЛИДЕР»');
+  SpreadsheetApp.getUi().showModalDialog(renderPanel_('CRM «Раздел Проект»').setWidth(1180).setHeight(760), 'CRM «Раздел Проект»');
 }
 
 function renderPanel_(title) {
@@ -304,7 +304,7 @@ function addDemoLead() {
     area: '12000',
     comment: 'Проверка работы CRM',
     intent: 'demo',
-    page: 'https://pg-lider.ru/',
+    page: 'https://razdel-proekt.ru/',
   });
   SpreadsheetApp.getActive().toast('Тестовая заявка добавлена');
 }

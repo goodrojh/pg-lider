@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Clock, ChevronRight, Calendar } from "lucide-react";
 import { POSTS, getPost, formatDate } from "@/lib/posts";
-import { asset } from "@/lib/site";
+import { asset, SITE } from "@/lib/site";
 import Header from "@/components/ui/Header";
 import ScrollTop from "@/components/ui/ScrollTop";
 import Footer from "@/components/sections/Footer";
@@ -24,9 +24,17 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const post = getPost(slug);
   if (!post) return {};
   return {
-    title: `${post.title} — ПГ «ЛИДЕР»`,
+    title: post.title,
     description: post.desc,
-    openGraph: { title: post.title, description: post.desc, type: "article" },
+    alternates: { canonical: `/blog/${post.slug}/` },
+    openGraph: {
+      title: post.title,
+      description: post.desc,
+      type: "article",
+      url: `/blog/${post.slug}/`,
+      publishedTime: post.date,
+      images: [post.image],
+    },
   };
 }
 
@@ -37,9 +45,36 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
   const toc = post.body.filter((b) => b.t === "h2").map((b) => ({ id: slugify(b.text), text: b.text }));
   const others = POSTS.filter((p) => p.slug !== post.slug).slice(0, 3);
+  const base = SITE.url.replace(/\/$/, "");
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Article",
+        headline: post.title,
+        description: post.desc,
+        datePublished: post.date,
+        dateModified: post.date,
+        image: `${base}${post.image}`,
+        inLanguage: "ru-RU",
+        mainEntityOfPage: `${base}/blog/${post.slug}/`,
+        author: { "@type": "Organization", name: SITE.name, url: base },
+        publisher: { "@id": `${base}/#organization` },
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Главная", item: `${base}/` },
+          { "@type": "ListItem", position: 2, name: "Статьи", item: `${base}/blog/` },
+          { "@type": "ListItem", position: 3, name: post.title },
+        ],
+      },
+    ],
+  };
 
   return (
     <main className="min-h-screen bg-white">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <ScrollTop />
       <Header solid />
 
@@ -59,7 +94,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           <div className="mt-6 flex flex-wrap items-center gap-5 text-[13px] text-white/60">
             <span className="inline-flex items-center gap-1.5"><Calendar size={14} className="text-amber" /> {formatDate(post.date)}</span>
             <span className="inline-flex items-center gap-1.5"><Clock size={14} className="text-amber" /> {post.readTime} мин чтения</span>
-            <span>Авторы: инженеры ПГ «ЛИДЕР»</span>
+            <span>Авторы: инженеры «Раздел Проект»</span>
           </div>
         </div>
       </section>

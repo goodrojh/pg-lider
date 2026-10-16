@@ -29,7 +29,7 @@ export default function Hero() {
     <section className="relative flex min-h-[100svh] w-full flex-col bg-navy lg:min-h-[108vh]">
       <img
         src={asset("/img/hero.webp")}
-        alt="Жилой комплекс, спроектированный ПГ «ЛИДЕР»"
+        alt="Жилой комплекс, спроектированный компанией «Раздел Проект»"
         className="absolute inset-0 z-0 h-full w-full object-cover"
       />
       <div className="absolute inset-0 z-[1] bg-gradient-to-b from-navy/80 via-navy/50 to-navy" />

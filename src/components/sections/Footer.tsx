@@ -140,7 +140,7 @@ export default function Footer() {
           </div>
 
           <div className="mt-6 border-t border-white/10 pt-5 text-[12px] leading-relaxed text-white/45">
-            ООО «ПГ „ЛИДЕР“» · архитектурно-строительное проектирование, техническое обследование, инженерные изыскания,
+            Раздел Проект · архитектурно-строительное проектирование, техническое обследование, инженерные изыскания,
             сохранение объектов культурного наследия · {SITE.address}
           </div>
 
@@ -153,7 +153,7 @@ export default function Footer() {
             >
               Сайт создан компанией <span className="font-semibold text-amber">{MADE_BY.name}</span>
             </a>
-            <span className="text-[12px] text-white/40">© 2018–{new Date().getFullYear()} Проектная группа «ЛИДЕР». Все права защищены.</span>
+            <span className="text-[12px] text-white/40">© 2018–{new Date().getFullYear()} {SITE.name}. Все права защищены.</span>
           </div>
         </motion.div>
       </div>

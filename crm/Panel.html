@@ -133,7 +133,7 @@
 <body>
 <div class="wrap">
   <header>
-    <div class="brand">CRM проектной группы <span>«ЛИДЕР»</span></div>
+    <div class="brand">CRM <span>«Раздел Проект»</span></div>
     <div class="spacer"></div>
     <button class="btn ghost" onclick="load()">Обновить</button>
     <button class="btn ghost" onclick="exportCsv()">Выгрузить CSV</button>
@@ -318,7 +318,7 @@
     var csv = '﻿' + [head.join(';')].concat(body).join('\n');
     var a = document.createElement('a');
     a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
-    a.download = 'zayavki-lider.csv';
+    a.download = 'zayavki-razdel-proekt.csv';
     a.click();
   }
 

@@ -30,7 +30,7 @@ export default function ArticleAside({ toc, title }: { toc: { id: string; text: 
         <div className="relative flex items-center gap-3">
           <img loading="lazy" decoding="async" src={asset("/img/logo.png")} alt="ГИП" className="h-12 w-12 rounded-full border-2 border-white/20 bg-white object-contain p-1.5" />
           <div>
-            <div className="text-[14px] font-bold">ГИП проектной группы «ЛИДЕР»</div>
+            <div className="text-[14px] font-bold">ГИП компании «Раздел Проект»</div>
             <div className="text-[12px] text-white/60">Главный инженер проекта</div>
           </div>
         </div>

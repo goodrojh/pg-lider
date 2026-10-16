@@ -52,14 +52,14 @@ export default function About() {
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1fr_1fr] lg:items-center">
           <div>
             <h2 className="font-display text-[32px] font-semibold leading-[1.08] tracking-[-0.01em] text-ink md:text-[46px]">
-              Проектная группа «ЛИДЕР»
+              Проектная организация «Раздел Проект»
             </h2>
             <p className="mt-5 text-[16px] leading-relaxed text-muted md:text-lg">
               Команда специалистов в области обследования зданий и сооружений, архитектурно-строительного проектирования,
               энергетического аудита и комплексного тендерного сопровождения проектных и строительных организаций.
             </p>
             <p className="mt-4 text-[16px] leading-relaxed text-muted md:text-lg">
-              С 2018 года специалистами группы реализовано более 150 крупных проектов в промышленном и гражданском
+              С 2018 года специалистами компании реализовано более 150 крупных проектов в промышленном и гражданском
               строительстве и коммерческой недвижимости. С 2019 года открыт филиал в Брянске, с 2023 года — в Орле.
               Сегодня в штате более 45 квалифицированных инженеров-проектировщиков.
             </p>
@@ -110,7 +110,7 @@ export default function About() {
               loading="lazy"
               decoding="async"
               src={asset("/img/case-meridian.webp")}
-              alt="Жилой комплекс, спроектированный проектной группой ЛИДЕР"
+              alt="Жилой комплекс, спроектированный компанией «Раздел Проект»"
               className="aspect-[16/11] w-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-navy/85 via-navy/20 to-transparent" />

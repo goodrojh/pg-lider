@@ -10,8 +10,9 @@ import PostGrid from "@/components/blog/PostGrid";
 import { POSTS } from "@/lib/posts";
 
 export const metadata: Metadata = {
-  title: "Статьи для заказчика проектирования — ПГ «ЛИДЕР»",
-  description: "Экспертиза, ТУ, BIM, состав документации, стоимость проектирования — практические материалы от инженеров проектной группы «ЛИДЕР».",
+  title: "Статьи для заказчика проектирования",
+  alternates: { canonical: "/blog/" },
+  description: "Экспертиза, ТУ, BIM, состав документации, стоимость проектирования — практические материалы от инженеров компании «Раздел Проект».",
 };
 
 export default function BlogIndex() {
