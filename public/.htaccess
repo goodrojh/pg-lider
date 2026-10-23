@@ -33,3 +33,11 @@ ErrorDocument 404 /404.html
   ExpiresByType video/mp4               "access plus 1 year"
   ExpiresByType text/html               "access plus 0 seconds"
 </IfModule>
+
+# 6. Папка с заявками (персональные данные) закрыта от веб-доступа
+<IfModule mod_rewrite.c>
+  RewriteRule ^leads/ - [F,L]
+</IfModule>
+<FilesMatch "\.(csv|log)$">
+  Require all denied
+</FilesMatch>

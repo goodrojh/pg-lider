@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { X, Phone, Send, CheckCircle2, Paperclip } from "lucide-react";
 import { SITE } from "@/lib/site";
 import { formatPhone, isPhoneComplete, submitLead } from "@/lib/lead";
+import ConsentCheckbox from "@/components/ui/ConsentCheckbox";
 
 export type FieldKey = "name" | "phone" | "email" | "objectType" | "area" | "comment" | "file";
 
@@ -45,12 +46,14 @@ export default function ModalProvider({ children }: { children: React.ReactNode 
   const [values, setValues] = useState<Record<string, string>>({});
   const [fileName, setFileName] = useState("");
   const [error, setError] = useState("");
+  const [consent, setConsent] = useState(false);
 
   const open = useCallback((c: LeadConfig) => {
     setCfg(c);
     setDone(false);
     setError("");
     setFileName("");
+    setConsent(false);
     setValues({ ...(c.prefill ?? {}) });
   }, []);
   const close = useCallback(() => setCfg(null), []);
@@ -76,10 +79,14 @@ export default function ModalProvider({ children }: { children: React.ReactNode 
       setError("Введите телефон полностью — по нему перезвонит ГИП.");
       return;
     }
+    if (!consent) {
+      setError("Отметьте согласие на обработку персональных данных.");
+      return;
+    }
     setError("");
     setSending(true);
     try {
-      await submitLead({ intent: cfg.intent, file: fileName, ...values });
+      await submitLead({ intent: cfg.intent, file: fileName, consent: "да", ...values });
       setDone(true);
     } catch {
       setError("Не удалось отправить. Позвоните нам: " + SITE.phone);
@@ -226,10 +233,11 @@ export default function ModalProvider({ children }: { children: React.ReactNode 
                         />
                       </label>
                     )}
+                    <ConsentCheckbox id="consent-modal" checked={consent} onChange={setConsent} />
                     {error && <p className="text-[13px] text-red-600">{error}</p>}
                     <button
                       type="submit"
-                      disabled={sending}
+                      disabled={sending || !consent}
                       className="mt-1 flex items-center justify-center gap-2 rounded-full bg-amber px-6 py-4 text-[15px] font-bold text-navy transition hover:bg-amber-dark disabled:opacity-60"
                     >
                       {sending ? "Отправляем…" : cfg.submitLabel ?? "Получить расчёт"}

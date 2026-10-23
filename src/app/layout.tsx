@@ -2,7 +2,10 @@ import type { Metadata, Viewport } from "next";
 import { IBM_Plex_Sans } from "next/font/google";
 import "./globals.css";
 import ModalProvider from "@/components/ui/ModalProvider";
+import CookieBanner from "@/components/ui/CookieBanner";
+import Analytics from "@/components/ui/Analytics";
 import { SITE, OFFICES } from "@/lib/site";
+import { LEGAL } from "@/lib/legal";
 
 const plex = IBM_Plex_Sans({
   subsets: ["latin", "cyrillic"],
@@ -62,6 +65,10 @@ function organizationJsonLd() {
     name: SITE.name,
     alternateName: "Раздел Проект — проектная организация",
     url: base,
+    // Реквизиты попадают в разметку только когда заполнены — см. src/lib/legal.ts
+    ...(LEGAL.fullName ? { legalName: LEGAL.fullName } : {}),
+    ...(LEGAL.inn ? { taxID: LEGAL.inn } : {}),
+    ...(LEGAL.ogrn ? { identifier: { "@type": "PropertyValue", name: "ОГРН", value: LEGAL.ogrn } } : {}),
     telephone: SITE.phone,
     email: SITE.email,
     description: DESC,
@@ -94,6 +101,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       </head>
       <body className="antialiased">
         <ModalProvider>{children}</ModalProvider>
+        <CookieBanner />
+        <Analytics />
       </body>
     </html>
   );

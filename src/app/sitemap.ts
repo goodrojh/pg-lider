@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { SITE } from "@/lib/site";
 import { POSTS } from "@/lib/posts";
+import { LEGAL_PAGES } from "@/lib/legal";
 
 export const dynamic = "force-static";
 
@@ -16,6 +17,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(p.date),
       changeFrequency: "monthly" as const,
       priority: 0.6,
+    })),
+    ...LEGAL_PAGES.map((p) => ({
+      url: `${base}${p.href}`,
+      lastModified: now,
+      changeFrequency: "yearly" as const,
+      priority: 0.2,
     })),
   ];
 }

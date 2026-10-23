@@ -6,18 +6,19 @@ import { SITE, NAV, SERVICES, OFFICES, MADE_BY, asset } from "@/lib/site";
 import Logo from "@/components/ui/Logo";
 import Messengers from "@/components/ui/Messengers";
 import { formatPhone, isPhoneComplete, submitLead } from "@/lib/lead";
-import { useLead } from "@/components/ui/ModalProvider";
+import ConsentCheckbox from "@/components/ui/ConsentCheckbox";
+import { LEGAL_PAGES } from "@/lib/legal";
 
 export default function Footer() {
-  const { open } = useLead();
   const [phone, setPhone] = useState("");
+  const [consent, setConsent] = useState(false);
   const [done, setDone] = useState(false);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isPhoneComplete(phone)) return;
+    if (!isPhoneComplete(phone) || !consent) return;
     try {
-      await submitLead({ intent: "footer-callback", phone });
+      await submitLead({ intent: "footer-callback", phone, consent: "да" });
     } catch {}
     setDone(true);
   };
@@ -71,13 +72,15 @@ export default function Footer() {
                   onChange={(e) => setPhone(formatPhone(e.target.value))}
                   className="min-w-0 flex-1 border-none bg-transparent px-6 text-[15px] text-white outline-none placeholder:text-white/60"
                 />
-                <button type="submit" className="flex h-full items-center gap-2 whitespace-nowrap rounded-full bg-amber px-5 text-[13px] font-bold tracking-[0.08em] text-navy transition-colors hover:bg-amber-dark md:px-8">
+                <button type="submit" disabled={!consent} className="flex h-full items-center gap-2 whitespace-nowrap rounded-full bg-amber px-5 text-[13px] font-bold tracking-[0.08em] text-navy transition-colors hover:bg-amber-dark disabled:opacity-50 md:px-8">
                   <Send size={14} /> <span className="hidden sm:inline">ПЕРЕЗВОНИТЕ</span>
                 </button>
               </>
             )}
           </motion.form>
-          <span className="mt-3 text-[12px] text-white/55">Нажимая кнопку, вы соглашаетесь с политикой обработки персональных данных</span>
+          <div className="mt-4 w-full max-w-[520px]">
+            <ConsentCheckbox id="consent-footer" checked={consent} onChange={setConsent} dark />
+          </div>
         </div>
 
         <motion.div
@@ -143,6 +146,14 @@ export default function Footer() {
             Раздел Проект · архитектурно-строительное проектирование, техническое обследование, инженерные изыскания,
             сохранение объектов культурного наследия · {SITE.address}
           </div>
+
+          <nav className="mt-5 flex flex-wrap gap-x-5 gap-y-2 border-t border-white/10 pt-5">
+            {LEGAL_PAGES.map((p) => (
+              <a key={p.href} href={asset(p.href)} className="text-[12px] text-white/50 underline-offset-4 transition-colors hover:text-white hover:underline">
+                {p.short}
+              </a>
+            ))}
+          </nav>
 
           <div className="mt-4 flex flex-col items-center justify-between gap-4 md:flex-row">
             <a

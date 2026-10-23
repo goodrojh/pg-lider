@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "deploy": "next build && node scripts/deploy-pages.mjs",
-    "build:domain": "node scripts/build-domain.mjs"
+    "build:domain": "node scripts/build-domain.mjs",
+    "check:legal": "node scripts/check-legal.mjs"
   },
   "dependencies": {
     "framer-motion": "^13.3.0",

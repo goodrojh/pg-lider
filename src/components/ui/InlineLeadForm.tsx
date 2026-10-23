@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Send, CheckCircle2, Phone } from "lucide-react";
 import { SITE } from "@/lib/site";
 import { formatPhone, isPhoneComplete, submitLead } from "@/lib/lead";
+import ConsentCheckbox from "@/components/ui/ConsentCheckbox";
 
 /** Встроенная (не модальная) форма — для конца статей и других мест, где форма должна быть частью страницы. */
 export default function InlineLeadForm({
@@ -22,6 +23,7 @@ export default function InlineLeadForm({
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [comment, setComment] = useState("");
+  const [consent, setConsent] = useState(false);
   const [error, setError] = useState("");
   const [sending, setSending] = useState(false);
   const [done, setDone] = useState(false);
@@ -32,10 +34,14 @@ export default function InlineLeadForm({
       setError("Введите телефон полностью — по нему перезвонит ГИП.");
       return;
     }
+    if (!consent) {
+      setError("Отметьте согласие на обработку персональных данных.");
+      return;
+    }
     setError("");
     setSending(true);
     try {
-      await submitLead({ intent, name, phone, comment, context: context ?? "" });
+      await submitLead({ intent, name, phone, comment, consent: "да", context: context ?? "" });
       setDone(true);
     } catch {
       setError("Не удалось отправить. Позвоните нам: " + SITE.phone);
@@ -92,16 +98,16 @@ export default function InlineLeadForm({
               value={comment}
               onChange={(e) => setComment(e.target.value)}
             />
+            <ConsentCheckbox id={`consent-${intent}`} checked={consent} onChange={setConsent} dark />
             {error && <p className="text-[13px] text-red-300">{error}</p>}
             <button
               type="submit"
-              disabled={sending}
+              disabled={sending || !consent}
               className="mt-1 flex items-center justify-center gap-2 rounded-full bg-amber px-6 py-4 text-[15px] font-bold text-navy transition hover:bg-amber-dark disabled:opacity-60"
             >
               {sending ? "Отправляем…" : button}
               {!sending && <Send size={16} />}
             </button>
-            <p className="text-center text-[12px] text-white/50">Нажимая кнопку, вы соглашаетесь с политикой обработки персональных данных.</p>
           </form>
         )}
       </div>

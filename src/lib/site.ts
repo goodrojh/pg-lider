@@ -23,6 +23,9 @@ export const SITE = {
   // URL веб-приложения Google Apps Script (инструкция — в папке /crm).
   // Пусто = демо-режим: формы показывают успех, но никуда не отправляют.
   formEndpoint: "https://script.google.com/macros/s/AKfycbxiNJwXKJsYZenIGTYOe2P0wztr_mFt0nZkrvWzJRysFHKv8Uaam6eUJDQnCaaWtQfulw/exec",
+  // Номер счётчика Яндекс.Метрики. Пусто = счётчик не подключается.
+  // Подключается только после согласия на аналитические cookie (см. Analytics.tsx).
+  metrikaId: "",
 };
 
 /** Разработчик сайта — ссылка в подвале */
