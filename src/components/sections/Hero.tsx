@@ -5,6 +5,7 @@ import { ArrowRight } from "lucide-react";
 import { asset } from "@/lib/site";
 import { useLead } from "@/components/ui/ModalProvider";
 import Header from "@/components/ui/Header";
+import HeroLeadForm from "@/components/ui/HeroLeadForm";
 
 const STATS = [
   { value: "150", label: "крупных проектов с 2018 года", suffix: "+" },
@@ -59,19 +60,22 @@ export default function Hero() {
           поликлиники, Троице-Сергиева Лавра. Проектирование, обследование, изыскания и сопровождение Главгосэкспертизы.
         </motion.p>
 
+        <HeroLeadForm />
+
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
-          className="mt-8 flex w-full max-w-md flex-col items-center gap-3 sm:w-auto sm:max-w-none sm:flex-row"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.55 }}
+          className="mt-5 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[13px] text-white/60"
         >
           <button
             onClick={openMain}
-            className="group flex w-full items-center justify-center gap-2 rounded-full bg-amber px-8 py-4 text-base font-bold text-navy shadow-[0_8px_32px_rgba(237,191,85,0.45)] transition-all hover:scale-105 hover:bg-amber-dark active:scale-95 sm:w-auto"
+            className="group inline-flex items-center gap-1.5 font-semibold text-white underline-offset-4 transition hover:text-amber hover:underline"
           >
-            Получить смету за 24 часа
-            <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+            Нужна смета с разбивкой по разделам
+            <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
           </button>
+          <span className="hidden text-white/25 sm:inline">·</span>
           <button
             onClick={() =>
               open({
@@ -82,26 +86,18 @@ export default function Hero() {
                 submitLabel: "Связаться с ГИПом",
               })
             }
-            className="w-full rounded-full border border-white/25 bg-white/10 px-8 py-4 text-base font-semibold text-white backdrop-blur-lg transition-all hover:bg-white/20 sm:w-auto"
+            className="font-semibold text-white underline-offset-4 transition hover:text-amber hover:underline"
           >
             Спросить ГИПа
           </button>
         </motion.div>
-        <motion.span
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="mt-3 text-[13px] text-white/60"
-        >
-          Расчёт бесплатный · перезвоним за 15 минут · без обязательств
-        </motion.span>
 
         {/* STATS */}
         <motion.div
           variants={{ hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.6 } } }}
           initial="hidden"
           animate="show"
-          className="mt-14 grid w-full max-w-5xl grid-cols-2 gap-3 md:grid-cols-4"
+          className="mt-10 grid w-full max-w-5xl grid-cols-2 gap-3 md:grid-cols-4"
         >
           {STATS.map((s) => (
             <motion.div
