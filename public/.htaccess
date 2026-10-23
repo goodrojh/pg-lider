@@ -1,11 +1,25 @@
 # Раздел Проект — настройки для Apache / LiteSpeed.
-# На nginx-хостинге этот файл просто игнорируется — вреда нет.
+# На nginx-хостинге без Apache файл просто игнорируется.
 
 RewriteEngine On
 
-# 1. Всегда HTTPS
-RewriteCond %{HTTPS} !=on
-RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+# 1. HTTPS
+#
+# Принудительный переход на HTTPS здесь НЕ включён намеренно.
+# На reg.ru и большинстве виртуальных хостингов сертификат обслуживает nginx,
+# а до Apache запрос доходит по обычному http. Переменная %{HTTPS} при этом
+# всегда равна "off", правило срабатывает на каждом запросе и получается
+# бесконечный цикл — ERR_TOO_MANY_REDIRECTS.
+#
+# Включайте перенаправление на HTTPS в панели управления хостингом.
+# Если такой настройки в панели нет — раскомментируйте блок ниже: он
+# дополнительно проверяет заголовки прокси и порт, поэтому не зацикливается.
+#
+# RewriteCond %{HTTPS} !=on
+# RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+# RewriteCond %{HTTP:X-Forwarded-SSL} !=on
+# RewriteCond %{SERVER_PORT} !=443
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
 
 # 2. Главное зеркало — без www
 RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
