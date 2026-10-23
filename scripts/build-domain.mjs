@@ -9,4 +9,9 @@ const env = {
 
 const r = spawnSync("npx", ["next", "build"], { stdio: "inherit", env, shell: true });
 if (r.status !== 0) process.exit(r.status ?? 1);
+
+// Переносим статику из _next в assets: reg.ru отдаёт 403 на пути с подчёркиванием
+const f = spawnSync("node", ["scripts/fix-assets-path.mjs"], { stdio: "inherit", shell: true });
+if (f.status !== 0) process.exit(f.status ?? 1);
+
 console.log("\nГотово: папка out/ — заливайте её на хостинг razdel-proekt.ru");

@@ -10,6 +10,12 @@
     {
       "name": "site-running",
       "url": "http://localhost:3100"
+    },
+    {
+      "name": "out",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8099", "--directory", "out"],
+      "port": 8099
     }
   ]
 }
