@@ -1,0 +1,57 @@
+# Раздел Проект — настройки для Apache / LiteSpeed.
+# На nginx-хостинге без Apache файл просто игнорируется.
+
+RewriteEngine On
+
+# 1. HTTPS
+#
+# Принудительный переход на HTTPS здесь НЕ включён намеренно.
+# На reg.ru и большинстве виртуальных хостингов сертификат обслуживает nginx,
+# а до Apache запрос доходит по обычному http. Переменная %{HTTPS} при этом
+# всегда равна "off", правило срабатывает на каждом запросе и получается
+# бесконечный цикл — ERR_TOO_MANY_REDIRECTS.
+#
+# Включайте перенаправление на HTTPS в панели управления хостингом.
+# Если такой настройки в панели нет — раскомментируйте блок ниже: он
+# дополнительно проверяет заголовки прокси и порт, поэтому не зацикливается.
+#
+# RewriteCond %{HTTPS} !=on
+# RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+# RewriteCond %{HTTP:X-Forwarded-SSL} !=on
+# RewriteCond %{SERVER_PORT} !=443
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+# 2. Главное зеркало — без www
+RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
+# 3. Своя страница 404
+ErrorDocument 404 /404.html
+
+# 4. Сжатие
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml
+  AddOutputFilterByType DEFLATE application/javascript application/json
+  AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# 5. Кэш статики
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css                "access plus 1 year"
+  ExpiresByType application/javascript  "access plus 1 year"
+  ExpiresByType image/webp              "access plus 1 year"
+  ExpiresByType image/jpeg              "access plus 1 year"
+  ExpiresByType image/png               "access plus 1 year"
+  ExpiresByType image/svg+xml           "access plus 1 year"
+  ExpiresByType video/mp4               "access plus 1 year"
+  ExpiresByType text/html               "access plus 0 seconds"
+</IfModule>
+
+# 6. Папка с заявками (персональные данные) закрыта от веб-доступа
+<IfModule mod_rewrite.c>
+  RewriteRule ^leads/ - [F,L]
+</IfModule>
+<FilesMatch "\.(csv|log)$">
+  Require all denied
+</FilesMatch>

@@ -1,0 +1,5 @@
+User-Agent: *
+Allow: /
+
+Host: https://razdel-proekt.ru
+Sitemap: https://razdel-proekt.ru/sitemap.xml
